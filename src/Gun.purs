@@ -1,4 +1,4 @@
-module Main where
+module Gun where
 
 import Prelude
 import Effect (Effect)
