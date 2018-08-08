@@ -3,3 +3,9 @@ exports.syncWithPeer = function (url) {
     return Gun(url);
   };
 };
+
+exports.syncWithPeers = function (urls) {
+  return function () {
+    return Gun(urls);
+  };
+};
