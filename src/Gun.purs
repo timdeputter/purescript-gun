@@ -47,3 +47,10 @@ foreign import back :: GunChainCtx -> GoBack -> GunChainCtx
 -- Save data into gun, syncing it with your connected peers.
 foreign import put :: forall a. GunChainCtx -> a -> Effect GunRef a
 
+
+-- gun.once(callback, option)
+-- Get the current data without subscribing to updates. Or undefined if it cannot be found.
+foreign import _once :: forall a. GunChainCtx -> EffectFnAff Maybe a
+
+once :: forall a. GunChainCtx -> Aff Maybe a
+once = fromEffectFnAff <<< _once
