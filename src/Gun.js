@@ -35,3 +35,16 @@ exports.put = function (ctx, data) {
     return ctx.put(data);
   };
 };
+
+exports._once = function (ctx) { 
+  return function (onError, onSuccess) { 
+    var canceled = false;
+    ctx.once(function(data){
+      if(!canceled) onSuccess(data);
+    });
+    return function (cancelError, cancelerError, cancelerSuccess) {
+      canceled = true;
+      cancelerSuccess();
+    };
+  };
+};
