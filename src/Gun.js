@@ -30,18 +30,8 @@ exports.back = = function (gundb, count) {
   };
 };
 
-exports._put = function (ctx, data) { 
-  return function (onError, onSuccess) {
-    ctx.put(submission, function(ack){
-      if(ack.err){
-        onError(ack.err);
-      } else {
-        onSuccess(exports.unit);
-      }
-    });
-    
-    return function (cancelError, cancelerError, cancelerSuccess) {
-      cancelerSuccess();
-    };
+exports.put = function (ctx, data) { 
+  return function () {
+    return ctx.put(data);
   };
 };
