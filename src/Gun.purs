@@ -10,6 +10,8 @@ foreign import data GunDb :: Type
 
 foreign import GunChainCtx :: Type
 
+foreign import GunRef :: Type -> Type
+
 
 --Gun(options)
 -- Used to create a new gun database instance.
@@ -43,7 +45,7 @@ foreign import back :: GunChainCtx -> GoBack -> GunChainCtx
 
 -- gun.put(data, callback) 
 -- Save data into gun, syncing it with your connected peers.
-foreign import _put :: forall a. GunChainCtx -> a -> EffectFnAff Unit
+foreign import _put :: forall a. GunChainCtx -> a -> EffectFnAff GunRef a
 
-put :: forall a. GunChainCtx -> a -> Aff Unit
+put :: forall a. GunChainCtx -> a -> Aff GunRef a
 put = fromEffectFnAff <<< _put
