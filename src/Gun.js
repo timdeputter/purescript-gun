@@ -12,11 +12,14 @@ exports.syncWithPeers = function (urls) {
   };
 };
 
-exports.get = function (gundb, name) {
+var get = function (ctx, name) {
   return function () {
-    return gundb.get(name);
+    return ctx.get(name);
   };
 };
+
+exports.getOnGunDb = get;
+exports.getOnChain = get;
 
 exports.back = = function (gundb, count) {
   return function () {
@@ -27,3 +30,18 @@ exports.back = = function (gundb, count) {
   };
 };
 
+exports._put = function (ctx, data) { 
+  return function (onError, onSuccess) {
+    ctx.put(submission, function(ack){
+      if(ack.err){
+        onError(ack.err);
+      } else {
+        onSuccess(exports.unit);
+      }
+    });
+    
+    return function (cancelError, cancelerError, cancelerSuccess) {
+      cancelerSuccess();
+    };
+  };
+};
