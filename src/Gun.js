@@ -40,7 +40,12 @@ exports._once = function (ctx) {
   return function (onError, onSuccess) { 
     var canceled = false;
     ctx.once(function(data){
-      if(!canceled) onSuccess(data);
+      if(!canceled) {
+        if(data === undefined)
+          onSuccess(exports.Nothing.value());
+        else
+          onSuccess(exports.Just.create(data));
+      }
     });
     return function (cancelError, cancelerError, cancelerSuccess) {
       canceled = true;
