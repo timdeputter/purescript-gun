@@ -45,7 +45,5 @@ foreign import back :: GunChainCtx -> GoBack -> GunChainCtx
 
 -- gun.put(data, callback) 
 -- Save data into gun, syncing it with your connected peers.
-foreign import _put :: forall a. GunChainCtx -> a -> EffectFnAff GunRef a
+foreign import put :: forall a. GunChainCtx -> a -> Effect GunRef a
 
-put :: forall a. GunChainCtx -> a -> Aff GunRef a
-put = fromEffectFnAff <<< _put
