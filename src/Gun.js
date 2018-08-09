@@ -28,7 +28,13 @@ exports.getOnChain = function (ctx, name) {
   };
 };
 
-exports.map = function (ctx, filter) {
+exports.map = function (ctx) {
+  return function () {
+    return ctx.map();
+  };
+};
+
+exports.mapAndFilter = function (ctx, filter) {
   return function () {
     return ctx.map(filter);
   };
