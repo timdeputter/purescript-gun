@@ -43,6 +43,12 @@ exports.put = function (ctx, data) {
   };
 };
 
+exports.set = function (ctx, ref) { 
+  return function () {
+    return ctx.set(ref);
+  };
+};
+
 exports._once = function (ctx) { 
   return function (onError, onSuccess) { 
     var canceled = false;
