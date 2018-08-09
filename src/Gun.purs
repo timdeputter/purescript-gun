@@ -20,6 +20,8 @@ foreign import syncWithPeer :: String -> Effect GunDb
 
 foreign import syncWithPeers :: Array String -> Effect GunDb
 
+foreign import offline :: Effect GunDb
+
 
 -- gun.get(key)
 -- Where to read data from.
