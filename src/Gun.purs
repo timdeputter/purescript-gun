@@ -69,3 +69,10 @@ foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
 foreign import map :: forall a. GunChainCtx -> GunChainCtx
 
 foreign import mapAndFilter :: forall a. GunChainCtx -> (a -> Boolean) -> GunChainCtx
+
+
+-- gun.path(key)
+-- Path does the same thing as get but has some conveniences built in.
+foreign import path :: GunChainCtx -> String -> GunChainCtx
+
+foreign import paths :: GunChainCtx -> Array String -> GunChainCtx
