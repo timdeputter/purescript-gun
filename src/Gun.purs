@@ -51,11 +51,19 @@ foreign import put :: forall a. GunChainCtx -> a -> Effect GunChainCtx
 
 -- gun.once(callback, option)
 -- Get the current data without subscribing to updates. Or undefined if it cannot be found.
-foreign import _once :: forall a. GunChainCtx -> EffectFnAff (Maybe a)
+foreign import _once :: forall a b. GunChainCtx -> EffectFnAff (Maybe { data :: a, key :: b })
 
-once :: forall a. GunChainCtx -> Aff (Maybe a)
+once :: forall a b. GunChainCtx -> Aff (Maybe { data :: a, key :: b })
 once = fromEffectFnAff <<< _once
+
 
 -- gun.set(data, callback)
 -- Add a unique item to an unordered list.
 foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
+
+
+-- gun.map(callback)
+-- Map iterates over each property and item on a node, passing it down the chain, 
+-- behaving like a forEach on your data. It also subscribes to every item as well 
+-- and listens for newly inserted items. 
+foreign import map :: forall a. GunChainCtx -> (a -> Bool) -> Effect GunChainCtx
