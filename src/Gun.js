@@ -28,6 +28,12 @@ exports.getOnChain = function (ctx, name) {
   };
 };
 
+exports.map = function (ctx, filter) {
+  return function () {
+    return ctx.map(filter);
+  };
+};
+
 exports.back = function (gundb, count) {
   return function () {
     if(count instanceof exports.NumberOfHops){
