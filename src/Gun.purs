@@ -66,4 +66,6 @@ foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
 -- Map iterates over each property and item on a node, passing it down the chain, 
 -- behaving like a forEach on your data. It also subscribes to every item as well 
 -- and listens for newly inserted items. 
-foreign import map :: forall a. GunChainCtx -> (a -> Boolean) -> GunChainCtx
+foreign import map :: forall a. GunChainCtx -> GunChainCtx
+
+foreign import mapAndFilter :: forall a. GunChainCtx -> (a -> Boolean) -> GunChainCtx
