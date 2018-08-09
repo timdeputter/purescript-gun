@@ -7,14 +7,10 @@ import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
 
 
-data GoBack = Root | NumberOfHops Int
-
 
 foreign import data GunDb :: Type
 
 foreign import data GunChainCtx :: Type
-
-foreign import data GunRef :: Type -> Type
 
 
 --Gun(options)
@@ -27,7 +23,6 @@ foreign import syncWithPeers :: Array String -> Effect GunDb
 
 -- gun.get(key)
 -- Where to read data from.
-
 class Getable a where
   get :: a -> String -> GunChainCtx
 
@@ -44,12 +39,14 @@ foreign import getOnChain :: GunChainCtx -> String -> GunChainCtx
 
 -- gun.back(amount)
 -- Move up to the parent context on the chain.
+data GoBack = Root | NumberOfHops Int
+
 foreign import back :: GunChainCtx -> GoBack -> GunChainCtx
 
 
 -- gun.put(data, callback) 
 -- Save data into gun, syncing it with your connected peers.
-foreign import put :: forall a. GunChainCtx -> a -> Effect (GunRef a)
+foreign import put :: forall a. GunChainCtx -> a -> Effect GunChainCtx
 
 
 -- gun.once(callback, option)
@@ -58,3 +55,7 @@ foreign import _once :: forall a. GunChainCtx -> EffectFnAff (Maybe a)
 
 once :: forall a. GunChainCtx -> Aff (Maybe a)
 once = fromEffectFnAff <<< _once
+
+-- gun.set(data, callback)
+-- Add a unique item to an unordered list.
+foreign import set :: forall a. GunChainCtx -> GunChainCtx -> Effect GunChainCtx
