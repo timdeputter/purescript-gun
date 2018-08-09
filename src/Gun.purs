@@ -58,4 +58,4 @@ once = fromEffectFnAff <<< _once
 
 -- gun.set(data, callback)
 -- Add a unique item to an unordered list.
-foreign import set :: forall a. GunChainCtx -> GunChainCtx -> Effect GunChainCtx
+foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
