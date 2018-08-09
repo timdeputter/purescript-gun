@@ -16,6 +16,12 @@ exports.syncWithPeers = function (urls) {
   };
 };
 
+exports.offline = function (urls) {
+  return function () {
+    return Gun(urls);
+  };
+};
+
 exports.getOnGunDb = function (ctx, name) {
   return function () {
     return ctx.get(name);
