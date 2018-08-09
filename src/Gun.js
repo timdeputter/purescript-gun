@@ -49,6 +49,18 @@ exports.back = function (gundb, count) {
   };
 };
 
+exports.path = function (ctx, path) {
+  return function () {
+    return ctx.path(path);
+  };
+};
+
+exports.paths = function (ctx, path) {
+  return function () {
+    return ctx.path(path);
+  };
+};
+
 exports.put = function (ctx, data) { 
   return function () {
     return ctx.put(data);
