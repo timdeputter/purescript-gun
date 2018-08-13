@@ -1,14 +1,17 @@
 module Gun.Sea where
 
-import Effect (Effect)
+import Gun (GunChainCtx, GunDb)
+import Effect.Aff (Aff)
+import Data.Function.Uncurried (Fn3, runFn3)
+import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
+import Data.Maybe
 
+foreign import _create :: Fn3 GunDb String String (EffectFnAff GunChainCtx)
 
-foreign import _create :: GunDb -> String -> String -> EffectFnAff User
-
-foreign import _auth :: GunDb -> String -> String -> EffectFnAff User
+foreign import _auth :: Fn3 GunDb String String (EffectFnAff GunChainCtx)
 
 auth :: GunDb -> String -> String -> Aff GunChainCtx 
-auth = fromEffectFnAff <<< _auth
+auth gundb usr pwd = fromEffectFnAff (runFn3 _auth gundb usr pwd)
 
 create :: GunDb -> String -> String -> Aff GunChainCtx 
-create = fromEffectFnAff <<< _create
+create  gundb usr pwd = fromEffectFnAff (runFn3 _create gundb usr pwd)

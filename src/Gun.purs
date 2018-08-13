@@ -26,7 +26,7 @@ foreign import offline :: Effect GunDb
 -- gun.get(key)
 -- Where to read data from.
 class Getable a where
-  get :: a -> String -> GunChainCtx
+  get :: String -> a -> GunChainCtx
 
 instance getGunDb :: Getable GunDb where
   get = getOnGunDb
@@ -34,21 +34,21 @@ instance getGunDb :: Getable GunDb where
 instance getGunChainCtx :: Getable GunChainCtx where
   get = getOnChain 
 
-foreign import getOnGunDb :: GunDb -> String -> GunChainCtx
+foreign import getOnGunDb :: String -> GunDb -> GunChainCtx
 
-foreign import getOnChain :: GunChainCtx -> String -> GunChainCtx
+foreign import getOnChain :: String -> GunChainCtx -> GunChainCtx
 
 
 -- gun.back(amount)
 -- Move up to the parent context on the chain.
 data GoBack = Root | NumberOfHops Int
 
-foreign import back :: GunChainCtx -> GoBack -> GunChainCtx
+foreign import back :: GoBack -> GunChainCtx -> GunChainCtx
 
 
 -- gun.put(data, callback) 
 -- Save data into gun, syncing it with your connected peers.
-foreign import put :: forall a. GunChainCtx -> a -> Effect GunChainCtx
+foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 
 
 -- gun.once(callback, option)
@@ -68,13 +68,13 @@ foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
 -- Map iterates over each property and item on a node, passing it down the chain, 
 -- behaving like a forEach on your data. It also subscribes to every item as well 
 -- and listens for newly inserted items. 
-foreign import map :: forall a. GunChainCtx -> GunChainCtx
+foreign import map :: GunChainCtx -> GunChainCtx
 
-foreign import mapAndFilter :: forall a. GunChainCtx -> (a -> Boolean) -> GunChainCtx
+foreign import mapAndFilter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
 
 
 -- gun.path(key)
 -- Path does the same thing as get but has some conveniences built in.
-foreign import path :: GunChainCtx -> String -> GunChainCtx
+foreign import path :: String -> GunChainCtx -> GunChainCtx
 
-foreign import paths :: GunChainCtx -> Array String -> GunChainCtx
+foreign import paths :: Array String -> GunChainCtx -> GunChainCtx
