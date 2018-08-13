@@ -4,7 +4,6 @@ import Gun (GunChainCtx, GunDb)
 import Effect.Aff (Aff)
 import Data.Function.Uncurried (Fn3, runFn3)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
-import Data.Maybe
 
 foreign import _create :: Fn3 GunDb String String (EffectFnAff GunChainCtx)
 
