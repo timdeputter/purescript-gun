@@ -16,9 +16,20 @@ main = run [consoleReporter] do
         gundb <- offline
         let path = gundb # get "users"
         ctx <-  path # put {name: "John", surname: "Doe"}
-        res <- once 
+        res <- path # once 
         res.name `shouldEqual` "John"        
-      pending "set"
+      it "organises things in sets" do
+        gundb <- offline
+        user <-  gundb # get "users" # put {name: "John", surname: "Doe"}
+        list <- gundb # get "userlist" # set user
+        pure unit
+      it "provides a shorthand for chaining gets" do
+        gundb <- offline
+        let path = gundb # path "users.jim"
+        ctx <-  path # put {name: "John", surname: "Doe"}
+        res <- path # once 
+        res.name `shouldEqual` "John"                
+      
       pending "map"
       pending "path"
 
