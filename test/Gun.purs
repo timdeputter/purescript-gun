@@ -7,7 +7,7 @@ import Test.Spec (pending, describe, it)
 import Test.Spec.Assertions (shouldEqual, fail)
 import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (run)
-import Gun (get, offline, once, path, put)
+import Gun (get, offline, once, put)
 import Data.Maybe (Maybe(..))
 
 main :: Effect Unit
@@ -22,9 +22,9 @@ main = run [consoleReporter] do
         case res of
           Just gunVal -> gunVal.data.name `shouldEqual` "John"
           Nothing -> fail "No result"
-      it "provides a shorthand for chaining gets" do
+      it "can chain multiple gets" do
         gundb <- liftEffect offline
-        let p = gundb # get "users" # path "public.admins"
+        let p = gundb # get "users" # get "friends"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
         res <- p # once 
         case res of

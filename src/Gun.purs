@@ -72,9 +72,3 @@ foreign import map :: GunChainCtx -> GunChainCtx
 
 foreign import mapAndFilter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
 
-
--- gun.path(key)
--- Path does the same thing as get but has some conveniences built in.
-foreign import path :: String -> GunChainCtx -> GunChainCtx
-
-foreign import paths :: Array String -> GunChainCtx -> GunChainCtx
