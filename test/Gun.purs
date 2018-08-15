@@ -41,7 +41,7 @@ main = run [consoleReporter] do
       
 
 assertGunResult :: forall r. Aff (Maybe {name :: String | r}) -> String -> Aff Unit
-assertGunResult aff name = aff >>= \res -> assertGunResultBound res name
+assertGunResult aff name = aff >>= \res -> bound res name
   where
   bound :: forall r. Maybe {name :: String | r} -> String -> Aff Unit
   bound Just gunVal expectedName = gunVal.data.name `shouldEqual` expectedName
