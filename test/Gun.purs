@@ -7,7 +7,7 @@ import Test.Spec (pending, describe, it)
 import Test.Spec.Assertions (shouldEqual, fail)
 import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (run)
-import Gun (get, offline, once, put)
+import Gun (get, offline, once, put, back, GoBack(NumberOfHops))
 import Data.Maybe (Maybe(..))
 import Effect.Aff (Aff)
 
