@@ -32,7 +32,7 @@ main = run [consoleReporter] do
           
       it "can go back on the chain" do
         gundb <- liftEffect offline
-        let p = gundb # get "users" # get "friends" # get "honks" # back NumberOfHops 2
+        let p = gundb # get "users" # get "friends" # get "honks" # back (NumberOfHops 2)
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
         assertGunResult (gundb # get "users" # once) "John"
         
