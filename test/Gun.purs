@@ -21,30 +21,29 @@ main = run [consoleReporter] do
         gundb <- liftEffect offline
         let p = gundb # get "users"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
-        res <- p # once 
-        case res of
-          Just gunVal -> gunVal.data.name `shouldEqual` "John"
-          Nothing -> fail "No result"
+        assertGunResult (pRef # once) "John"
           
       it "can chain multiple gets" do
         gundb <- liftEffect offline
         let p = gundb # get "users" # get "friends"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
-        res <- p # once 
-        case res of
-          Just gunVal -> gunVal.data.name `shouldEqual` "John"
-          Nothing -> fail "No result"
+        assertGunResult (pRef # once) "John"
           
       it "can go back on the chain" do
         gundb <- liftEffect offline
         let p = gundb # get "users" # get "friends" # get "honks" # back NumberOfHops 2
         let pRef = gundb # get "users"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
-        res <- pRef # once 
-        case res of
-          Just gunVal -> gunVal.data.name `shouldEqual` "John"
-          Nothing -> fail "No result"
+        assertGunResult (pRef # once) "John"
         
       pending "map"
       pending "path"
+      
+
+assertGunResult :: forall r. Aff (Maybe {name :: String | r}) -> String -> Aff Unit
+assertGunResult aff name = aff >>= \res -> assertGunResultBound res name
+  where
+  bound :: forall r. Maybe {name :: String | r} -> String -> Aff Unit
+  bound Just gunVal expectedName = gunVal.data.name `shouldEqual` expectedName
+  bound Nothing _ = fail "No result"
 
