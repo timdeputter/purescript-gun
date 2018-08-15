@@ -9,6 +9,7 @@ import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (run)
 import Gun (get, offline, once, put)
 import Data.Maybe (Maybe(..))
+import Effect.Aff (Aff)
 
 main :: Effect Unit
 main = run [consoleReporter] do
@@ -32,9 +33,8 @@ main = run [consoleReporter] do
       it "can go back on the chain" do
         gundb <- liftEffect offline
         let p = gundb # get "users" # get "friends" # get "honks" # back NumberOfHops 2
-        let pRef = gundb # get "users"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
-        assertGunResult (pRef # once) "John"
+        assertGunResult (gundb # get "users" # once) "John"
         
       pending "map"
       pending "path"
