@@ -1,6 +1,6 @@
 module Test.Main where
 
-import Prelude (Unit, bind, discard, (#), ($))
+import Prelude (Unit, bind, discard, (#), ($), (>>=))
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Test.Spec (pending, describe, it)
@@ -22,13 +22,13 @@ main = run [consoleReporter] do
         gundb <- liftEffect offline
         let p = gundb # get "users"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
-        assertGunResult (pRef # once) "John"
+        assertGunResult (p # once) "John"
           
       it "can chain multiple gets" do
         gundb <- liftEffect offline
         let p = gundb # get "users" # get "friends"
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
-        assertGunResult (pRef # once) "John"
+        assertGunResult (p # once) "John"
           
       it "can go back on the chain" do
         gundb <- liftEffect offline
