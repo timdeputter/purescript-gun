@@ -40,7 +40,7 @@ main = run [consoleReporter] do
       pending "path"
       
 
-assertGunResult :: forall a b. Aff (Maybe {data :: {name :: String | a} | b) -> String -> Aff Unit
+assertGunResult :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> String -> Aff Unit
 assertGunResult aff name = aff >>= \res -> bound res name
   where
   bound :: forall a b. Maybe {data :: {name :: String | a} | b} -> String -> Aff Unit
