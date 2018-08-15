@@ -44,6 +44,6 @@ assertGunResult :: forall r. Aff (Maybe {name :: String | r}) -> String -> Aff U
 assertGunResult aff name = aff >>= \res -> bound res name
   where
   bound :: forall r. Maybe {name :: String | r} -> String -> Aff Unit
-  bound Just gunVal expectedName = gunVal.data.name `shouldEqual` expectedName
+  bound (Just gunVal) expectedName = gunVal.data.name `shouldEqual` expectedName
   bound Nothing _ = fail "No result"
 
