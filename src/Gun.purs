@@ -72,3 +72,7 @@ foreign import map :: GunChainCtx -> GunChainCtx
 
 foreign import mapAndFilter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
 
+-- gun.on(callback, option)
+-- Subscribe to updates and changes on a node or property in realtime.
+foreign import on :: forall a b. (a -> b -> Effect Unit) -> GunChainCtx -> Effect GunChainCtx
+

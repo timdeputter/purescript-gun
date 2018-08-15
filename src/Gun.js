@@ -12,6 +12,16 @@ exports.syncWithPeer = function (url) {
   };
 };
 
+exports.on = function (handler) {
+  return function (ctx) {
+    return function() {
+      ctx.on(function(data,key){
+        return handler(data)(key)();
+      });
+    };
+  };
+};
+
 exports.syncWithPeers = function (urls) {
   return function () {
     return Gun(urls);
