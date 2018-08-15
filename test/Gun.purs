@@ -40,10 +40,10 @@ main = run [consoleReporter] do
       pending "path"
       
 
-assertGunResult :: forall r. Aff (Maybe {name :: String | r}) -> String -> Aff Unit
+assertGunResult :: forall a b. Aff (Maybe {data :: {name :: String | a} | b) -> String -> Aff Unit
 assertGunResult aff name = aff >>= \res -> bound res name
   where
-  bound :: forall r. Maybe {name :: String | r} -> String -> Aff Unit
+  bound :: forall a b. Maybe {data :: {name :: String | a} | b} -> String -> Aff Unit
   bound (Just gunVal) expectedName = gunVal.data.name `shouldEqual` expectedName
   bound Nothing _ = fail "No result"
 
