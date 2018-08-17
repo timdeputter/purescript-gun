@@ -36,9 +36,16 @@ main = run [consoleReporter] do
         ctx <-  liftEffect $ p # put {name: "John", surname: "Doe"}
         assertGunResult (gundb # get "users" # once) "John"
         
+      it "can subscribe to changes on a chaincontext" do
+        gundb <- liftEffect offline
+        let p = gundb # get "users"
+        ctx <-  liftEffect $ p # on handleUserChanges >>= put {name: "John", surname: "Doe"}
+        
       pending "map"
       pending "path"
       
+handleUserChanges :: forall a. {name :: String | a} -> String -> Effect Unit
+handleUserChanges {name} = name `shouldEqual` expectedName 
 
 assertGunResult :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> String -> Aff Unit
 assertGunResult aff name = aff >>= \res -> bound res name
