@@ -8,7 +8,6 @@ import Control.Semigroupoid ((<<<))
 import Data.Unit (Unit)
 
 
-
 foreign import data GunDb :: Type
 
 foreign import data GunChainCtx :: Type
@@ -27,24 +26,15 @@ foreign import offline :: Effect GunDb
 -- gun.get(key)
 -- Where to read data from.
 class Getable a where
-  get :: String -> a -> GunChainCtx
+  get :: a -> GunDb -> GunChainCtx
 
-instance getGunDb :: Getable GunDb where
-  get = getOnGunDb
+instance getString :: Getable String where
+  get path db = _get [path] db
 
-instance getGunChainCtx :: Getable GunChainCtx where
-  get = getOnChain 
+instance getStringArray:: Getable (Array String) where
+  get = _get
 
-foreign import getOnGunDb :: String -> GunDb -> GunChainCtx
-
-foreign import getOnChain :: String -> GunChainCtx -> GunChainCtx
-
-
--- gun.back(amount)
--- Move up to the parent context on the chain.
-data GoBack = Root | NumberOfHops Int
-
-foreign import back :: GoBack -> GunChainCtx -> GunChainCtx
+foreign import _get :: Array String -> GunDb -> GunChainCtx
 
 
 -- gun.put(data, callback) 
@@ -76,4 +66,5 @@ foreign import mapAndFilter :: forall a. (a -> Boolean) -> GunChainCtx -> GunCha
 -- gun.on(callback, option)
 -- Subscribe to updates and changes on a node or property in realtime.
 foreign import on :: forall a b. (a -> b -> Effect Unit) -> GunChainCtx -> Effect GunChainCtx
+
 

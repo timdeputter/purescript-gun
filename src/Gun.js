@@ -29,43 +29,37 @@ exports.syncWithPeers = function (urls) {
 };
 
 exports.offline = function () {
+  console.log('offline');
   return Gun();
 };
 
-exports.getOnGunDb = function (name) {
+exports._get = function (pathElements) {
   return function (ctx){
-    return ctx.get(name);
-  };
-};
-
-exports.getOnChain = function (name) {
-  return function (ctx){
-    return ctx.get(name);
+    var arrayLength = pathElements.length;
+    for (var i = 0; i < arrayLength; i++) {
+      console.log('get');
+      ctx = ctx.get(pathElements[i]);
+    }
+    return ctx;
   };
 };
 
 exports.map = function (ctx) {
+  console.log('map');
   return ctx.map();
 };
 
 exports.mapAndFilter = function (filter) {
   return function (ctx){
+    console.log('mapAndFilter');
     return ctx.map(filter);
-  };
-};
-
-exports.back = function (count) {
-  return function (gundb){
-    if(count instanceof exports.NumberOfHops){
-      return gundb.back(count.value0);
-    }
-    return gundb.back(-1);
   };
 };
 
 exports.put = function (data) { 
   return function (ctx){
     return function () {
+      console.log('put');
       return ctx.put(data);
     };
   };
@@ -74,6 +68,7 @@ exports.put = function (data) {
 exports.set = function (ref) { 
   return function (ctx){
     return function () {
+      console.log('set');
       return ctx.set(ref);
     };
   };
@@ -82,6 +77,7 @@ exports.set = function (ref) {
 exports._once = function (ctx) { 
   return function (onError, onSuccess) { 
     var canceled = false;
+    console.log('once');
     ctx.once(function(data, key){
       if(!canceled) {
         if(data === undefined){
