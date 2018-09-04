@@ -1,13 +1,13 @@
 module Test.Main where
 
-import Prelude (Unit, bind, discard, (#), ($), (>>=))
+import Prelude (Unit, bind, discard, (#), ($), (>>=), pure, unit)
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Test.Spec (pending, describe, it)
 import Test.Spec.Assertions (shouldEqual, fail)
 import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (run)
-import Gun (get, offline, once, put)
+import Gun (get, offline, once, put, set)
 import Data.Maybe (Maybe(..))
 import Effect.Aff (Aff)
 
@@ -27,6 +27,14 @@ main = run [consoleReporter] do
         gundb <- liftEffect offline
         ctx <-  liftEffect $ gundb # get ["users", "friends"] # put {name: "John", surname: "Doe"}
         assertGunResult (gundb # get ["users", "friends"] # once) "John"
+
+      it "can organize multiple objects in sets" do
+        gundb <- liftEffect offline
+        john <- liftEffect $ gundb # get "john" # put {name: "John"}
+        jim <- liftEffect $ gundb # get "jim" # put {name: "jim"}
+        _ <- liftEffect $ gundb # get "users" # set john
+        _ <- liftEffect $ gundb # get "users" # set jim
+        pure unit
 
       -- !!!!! HIER MUSS WARSCHEINLICH EIN REF (Effect.Ref) BENUTZT WERDEN UM ZU TESTEN !!!!
       -- it "can subscribe to changes on a chaincontext" do
