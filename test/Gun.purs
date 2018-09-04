@@ -34,7 +34,7 @@ main = run [consoleReporter] do
         jim <- liftEffect $ gundb # get "jim" # put {name: "jim"}
         _ <- liftEffect $ gundb # get "users" # set john
         _ <- liftEffect $ gundb # get "users" # set jim
-        pure unit
+        assertGunResult gundb # get "users" # map # once 
 
       -- !!!!! HIER MUSS WARSCHEINLICH EIN REF (Effect.Ref) BENUTZT WERDEN UM ZU TESTEN !!!!
       -- it "can subscribe to changes on a chaincontext" do
