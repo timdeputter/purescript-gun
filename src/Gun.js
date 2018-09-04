@@ -2,8 +2,7 @@
 
 // module Gun
 
-var Gun = require('gun/gun');
-require('gun/lib/store');
+var Gun = require('gun');
 
 var Maybe = require('Data.Maybe');
 
@@ -30,7 +29,6 @@ exports.syncWithPeers = function (urls) {
 };
 
 exports.offline = function () {
-  console.log('offline');
   return Gun();
 };
 
@@ -38,7 +36,6 @@ exports._get = function (pathElements) {
   return function (ctx){
     var arrayLength = pathElements.length;
     for (var i = 0; i < arrayLength; i++) {
-      console.log('get');
       ctx = ctx.get(pathElements[i]);
     }
     return ctx;
@@ -46,13 +43,11 @@ exports._get = function (pathElements) {
 };
 
 exports.map = function (ctx) {
-  console.log('map');
   return ctx.map();
 };
 
 exports.mapAndFilter = function (filter) {
   return function (ctx){
-    console.log('mapAndFilter');
     return ctx.map(filter);
   };
 };
@@ -60,7 +55,6 @@ exports.mapAndFilter = function (filter) {
 exports.put = function (data) { 
   return function (ctx){
     return function () {
-      console.log('put');
       return ctx.put(data);
     };
   };
@@ -69,7 +63,6 @@ exports.put = function (data) {
 exports.set = function (ref) { 
   return function (ctx){
     return function () {
-      console.log('set');
       return ctx.set(ref);
     };
   };
@@ -78,7 +71,6 @@ exports.set = function (ref) {
 exports._once = function (ctx) { 
   return function (onError, onSuccess) { 
     var canceled = false;
-    console.log('once');
     ctx.once(function(data, key){
       if(!canceled) {
         if(data === undefined){
