@@ -2,7 +2,7 @@
 
 // module Gun
 
-var Gun = require('gun/gun');
+var Gun = require('gun');
 
 var Maybe = require('Data.Maybe');
 
