@@ -1,6 +1,6 @@
 module Gun where
 
-import Prelude (bind)
+import Prelude
 import Effect (Effect)
 import Effect.Aff (Aff, makeAff, effectCanceler)
 import Effect.Aff.Compat
