@@ -48,7 +48,7 @@ foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 foreign import _once :: forall a b. (Maybe { data :: a, key :: b } -> Effect Unit) -> GunChainCtx -> Effect Unit
 
 once :: forall a b. GunChainCtx -> Aff (Maybe { data :: a, key :: b })
-once ctx = makeAff \error success ->  effectCanceler $ _once success ctx
+once ctx = makeAff \error success ->  _once success ctx
 
   
 -- gun.set(data, callback)
