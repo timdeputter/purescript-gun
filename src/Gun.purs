@@ -1,6 +1,6 @@
 module Gun where
 
-import Prelude (Unit, bind, pure, ($))
+
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Aff.Compat
