@@ -2,7 +2,7 @@ module Gun where
 
 import Prelude (Unit, bind, pure, ($))
 import Effect (Effect)
-import Effect.Aff (Aff, makeAff, effectCanceler)
+import Effect.Aff (Aff, fromEffectFnAff)
 import Effect.Aff.Compat
 import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
