@@ -82,21 +82,3 @@ exports._once = function (handler) {
   };
 };
 
-exports._once = function (ctx) { 
-  return function (onError, onSuccess) { 
-    var canceled = false;
-    ctx.once(function(data, key){
-      if(!canceled) {
-        if(data === undefined){
-          onSuccess(Maybe.Nothing.value0);
-        } else{
-          onSuccess(Maybe.Just.create({data: data, key: key}));
-        }
-      }
-    });
-    return function (cancelError, cancelerError, cancelerSuccess) {
-      canceled = true;
-      cancelerSuccess();
-    };
-  };
-};
