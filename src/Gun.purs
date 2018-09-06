@@ -44,11 +44,13 @@ foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 
 -- gun.once(callback, option)
 -- Get the current data without subscribing to updates. Or undefined if it cannot be found.
-foreign import _once :: forall a b. (Maybe { data :: a, key :: b } -> Effect Unit) -> GunChainCtx -> Effect GunChainCtx
+foreign import _once :: forall a b. (Maybe { data :: a, key :: b } -> Effect Unit) -> GunChainCtx -> Effect Unit
 
 once :: forall a b. GunChainCtx -> Aff (Maybe { data :: a, key :: b })
-once ctx = makeAff \error success -> _once success ctx
-
+once ctx = makeAff \error success ->  do
+  e <- _once success ctx
+  pure (effectCanceler e)
+  
 -- gun.set(data, callback)
 -- Add a unique item to an unordered list.
 foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
