@@ -12,11 +12,11 @@ exports.syncWithPeer = function (url) {
   };
 };
 
-exports.on = function (handler) {
+exports._on = function (handler) {
   return function (ctx) {
     return function() {
       ctx.on(function(data,key){
-        return handler(data)(key)();
+        return handler({data: data, key: key})();
       });
     };
   };
@@ -64,6 +64,20 @@ exports.set = function (ref) {
   return function (ctx){
     return function () {
       return ctx.set(ref);
+    };
+  };
+};
+
+exports._once = function (handler) {
+  return function (ctx) {
+    return function() {
+      ctx.on(function(data,key){
+        if(data === undefined){
+          return handler(Maybe.Nothing.value0)();
+        } else{
+          return handler(Maybe.Just.create({data: data, key: key}))();
+        }
+      });
     };
   };
 };
