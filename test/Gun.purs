@@ -4,7 +4,7 @@ import Prelude (Unit, bind, discard, (#), ($), (>>=), pure, unit)
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Test.Spec (pending, describe, it)
-import Test.Spec.Assertions (shouldEqual, fail)
+import Test.Spec.Assertions (shouldEqual, fail, shouldContain)
 import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (run)
 import Gun (get, offline, once, put, set)
@@ -37,10 +37,10 @@ main = run [consoleReporter] do
         assertGunResults (gundb # get "users" # map # once) ["John", "jim"]
 
 assertGunResults :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> Array String -> Aff Unit
-assertGunResults aff names = aff >>= \res -> bound res name
+assertGunResults aff names = aff >>= \res -> bound res names
   where
   bound :: forall c d. Maybe {data :: {name :: String | c} | d} -> String -> Aff Unit
-  bound (Just gunVal) expectedName = gunVal.data.name `shouldEqual` expectedName
+  bound (Just gunVal) expectedNames = expectedNames `shouldContain` gunVal.data.name
   bound Nothing _ = fail "No result"
 
 
