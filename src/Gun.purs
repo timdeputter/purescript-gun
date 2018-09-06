@@ -1,7 +1,8 @@
 module Gun where
 
+import Prelude (bind)
 import Effect (Effect)
-import Effect.Aff (Aff, makeAff)
+import Effect.Aff (Aff, makeAff, effectCanceler)
 import Effect.Aff.Compat
 import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
