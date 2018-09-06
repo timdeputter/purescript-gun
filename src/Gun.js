@@ -12,12 +12,17 @@ exports.syncWithPeer = function (url) {
   };
 };
 
-exports._on = function (handler) {
-  return function (ctx) {
-    return function() {
-      ctx.on(function(data,key){
-        return handler({data: data, key: key})();
-      });
+exports._on = function (ctx) { 
+  return function (onError, onSuccess) { 
+    var canceled = false;
+    ctx.on(function(data, key){
+      if(!canceled) {
+        handler({data: data, key: key})();
+      }
+    });
+    return function (cancelError, cancelerError, cancelerSuccess) {
+      canceled = true;
+      cancelerSuccess();
     };
   };
 };
@@ -68,17 +73,21 @@ exports.set = function (ref) {
   };
 };
 
-exports._once = function (handler) {
-  return function (ctx) {
-    return function() {
-      ctx.on(function(data,key){
+exports._once = function (ctx) { 
+  return function (onError, onSuccess) { 
+    var canceled = false;
+    ctx.once(function(data, key){
+      if(!canceled) {
         if(data === undefined){
-          return handler(Maybe.Nothing.value0)();
+          onSuccess(Maybe.Nothing.value0);
         } else{
-          return handler(Maybe.Just.create({data: data, key: key}))();
+          onSuccess(Maybe.Just.create({data: data, key: key}));
         }
-      });
+      }
+    });
+    return function (cancelError, cancelerError, cancelerSuccess) {
+      canceled = true;
+      cancelerSuccess();
     };
   };
 };
-
