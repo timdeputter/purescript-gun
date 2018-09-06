@@ -53,7 +53,7 @@ exports.map = function (ctx) {
 
 exports.mapAndFilter = function (filter) {
   return function (ctx){
-    return ctx.map(e => filter(e) ? e : undefined);
+    return ctx.map(function(e){ return filter(e) ? e : undefined; });
   };
 };
 
