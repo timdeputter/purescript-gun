@@ -1,7 +1,7 @@
 module Gun where
 
 import Effect (Effect)
-import Effect.Aff (Aff)
+import Effect.Aff (Aff, makeAff)
 import Effect.Aff.Compat
 import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
