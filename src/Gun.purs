@@ -44,11 +44,10 @@ foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 
 -- gun.once(callback, option)
 -- Get the current data without subscribing to updates. Or undefined if it cannot be found.
-foreign import _once :: forall a b. GunChainCtx -> EffectFnAff (Maybe { data :: a, key :: b })
+foreign import _once :: forall a b. (Maybe { data :: a, key :: b } -> Effect Unit) -> GunChainCtx -> Effect GunChainCtx
 
 once :: forall a b. GunChainCtx -> Aff (Maybe { data :: a, key :: b })
-once = fromEffectFnAff <<< _once
-
+once = makeAff \error success -> _once success ctx
 
 -- gun.set(data, callback)
 -- Add a unique item to an unordered list.
@@ -65,6 +64,7 @@ foreign import mapAndFilter :: forall a. (a -> Boolean) -> GunChainCtx -> GunCha
 
 -- gun.on(callback, option)
 -- Subscribe to updates and changes on a node or property in realtime.
-foreign import on :: forall a b. (a -> b -> Effect Unit) -> GunChainCtx -> Effect GunChainCtx
+foreign import _on :: forall a b. ({data:: a, key :: b} -> Effect Unit) -> GunChainCtx -> Effect GunChainCtx
 
-
+on :: forall a b. GunChainCtx -> Aff { data :: a, key :: b }
+on ctx = makeAff \error success -> _on success ctx
