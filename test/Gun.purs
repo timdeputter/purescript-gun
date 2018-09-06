@@ -35,6 +35,14 @@ main = run [consoleReporter] do
         _ <- liftEffect $ gundb # get "users" # set john
         _ <- liftEffect $ gundb # get "users" # set jim
         assertGunResults (gundb # get "users" # map # once) ["John", "jim"]
+        
+      it "allows to make subscriptions on changes" do
+        gundb <- liftEffect offline
+        john <- liftEffect $ gundb # get "john" # put {name: "John"}
+        jim <- liftEffect $ gundb # get "jim" # put {name: "jim"}
+        _ <- liftEffect $ gundb # get "users" # set john
+        _ <- liftEffect $ gundb # get "users" # set jim
+        assertGunResults (gundb # get "users" # map # on) ["John", "jim"]
 
 assertGunResults :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> Array String -> Aff Unit
 assertGunResults aff names = aff >>= \res -> bound res names
