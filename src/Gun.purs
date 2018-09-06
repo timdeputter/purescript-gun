@@ -69,4 +69,4 @@ foreign import mapAndFilter :: forall a. (a -> Boolean) -> GunChainCtx -> GunCha
 foreign import _on :: forall a b. GunChainCtx -> EffectFnAff { data :: a, key :: b }
 
 on :: forall a b. GunChainCtx -> Aff { data :: a, key :: b }
-on ctx = fromEffectFnAff <<< _once
+on ctx = fromEffectFnAff <<< _on
