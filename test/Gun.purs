@@ -3,11 +3,11 @@ module Test.Main where
 import Prelude (Unit, bind, discard, (#), ($), (>>=), pure, unit)
 import Effect (Effect)
 import Effect.Class (liftEffect)
-import Test.Spec (pending, describe, it)
+import Test.Spec (describe, it)
 import Test.Spec.Assertions (shouldEqual, fail, shouldContain)
 import Test.Spec.Reporter.Console (consoleReporter)
 import Test.Spec.Runner (run)
-import Gun (get, offline, once, put, set)
+import Gun (get, offline, once, put, set, map, on)
 import Data.Maybe (Maybe(..))
 import Effect.Aff (Aff)
 
@@ -34,7 +34,7 @@ main = run [consoleReporter] do
         jim <- liftEffect $ gundb # get "jim" # put {name: "jim"}
         _ <- liftEffect $ gundb # get "users" # set john
         _ <- liftEffect $ gundb # get "users" # set jim
-        assertGunResults (gundb # get "users" # map # once) ["John", "jim"]
+        assertOnce (gundb # get "users" # map # once) ["John", "jim"]
         
       it "allows to make subscriptions on changes" do
         gundb <- liftEffect offline
@@ -42,14 +42,19 @@ main = run [consoleReporter] do
         jim <- liftEffect $ gundb # get "jim" # put {name: "jim"}
         _ <- liftEffect $ gundb # get "users" # set john
         _ <- liftEffect $ gundb # get "users" # set jim
-        assertGunResults (gundb # get "users" # map # on) ["John", "jim"]
+        assertOn (gundb # get "users" # map # on) ["John", "jim"]
 
-assertGunResults :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> Array String -> Aff Unit
-assertGunResults aff names = aff >>= \res -> bound res names
+
+assertOnce :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> Array String -> Aff Unit
+assertOnce aff names = aff >>= \res -> bound res names
   where
-  bound :: forall c d. Maybe {data :: {name :: String | c} | d} -> String -> Aff Unit
-  bound (Just gunVal) expectedNames = expectedNames `shouldContain` gunVal.data.name
+  bound (Just gunVal) expectedNames = shouldContain expectedNames gunVal.data.name
   bound Nothing _ = fail "No result"
+
+assertOn :: forall a b. Aff {data :: {name :: String | a} | b} -> Array String -> Aff Unit
+assertOn aff names = aff >>= \res -> bound res names
+  where
+  bound gunVal expectedNames = shouldContain expectedNames gunVal.data.name
 
 
 assertGunResult :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> String -> Aff Unit

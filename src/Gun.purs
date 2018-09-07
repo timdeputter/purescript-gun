@@ -6,14 +6,13 @@ import Effect.Aff (Aff)
 import Effect.Aff.Compat
 import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
-import Data.Unit (Unit)
 
 
 foreign import data GunDb :: Type
 
 foreign import data GunChainCtx :: Type
 
-foreign import data GunRoot :: Type
+foreign import data User :: Type
 
 
 --Gun(options)
@@ -30,24 +29,24 @@ foreign import offline :: Effect GunDb
 -- Where to read data from.
 
 class Getable a b where
-  doget :: a -> b -> GunChainCtx
+  get :: a -> b -> GunChainCtx
 
-instance getString :: Getable String GunDb where
-  doget path db = _get [path] db
+instance getStringFromGunDb :: Getable String GunDb where
+  get path db = _getOnGunDb [path] db
 
-instance getStringArray:: Getable (Array String) GunDb where
-  doget = _get
+instance getStringArrayFromGunDb :: Getable (Array String) GunDb where
+  get = _getOnGunDb
 
-instance getString :: Getable String GunRoot where
-  doget path db = _getOnRoot [path] db
+instance getStringFromUser :: Getable String User where
+  get path db = _getOnUser [path] db
 
-instance getStringArray:: Getable (Array String) GunRoot where
-  doget = _getOnRoot
+instance getStringArrayFromUser :: Getable (Array String) User where
+  get = _getOnUser
 
 
-foreign import _get :: Array String -> GunDb -> GunChainCtx
+foreign import _getOnGunDb :: Array String -> GunDb -> GunChainCtx
 
-foreign import _getOnRoot :: Array String -> GunRoot -> GunChainCtx
+foreign import _getOnUser :: Array String -> User -> GunChainCtx
 
 
 -- gun.put(data, callback) 

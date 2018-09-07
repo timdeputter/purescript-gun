@@ -37,7 +37,17 @@ exports.offline = function () {
   return Gun();
 };
 
-exports._get = function (pathElements) {
+exports._getOnGunDb = function (pathElements) {
+  return function (ctx){
+    var arrayLength = pathElements.length;
+    for (var i = 0; i < arrayLength; i++) {
+      ctx = ctx.get(pathElements[i]);
+    }
+    return ctx;
+  };
+};
+
+exports._getOnUser = function (pathElements) {
   return function (ctx){
     var arrayLength = pathElements.length;
     for (var i = 0; i < arrayLength; i++) {
