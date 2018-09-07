@@ -13,6 +13,8 @@ foreign import data GunDb :: Type
 
 foreign import data GunChainCtx :: Type
 
+foreign import data GunRoot :: Type
+
 
 --Gun(options)
 -- Used to create a new gun database instance.
@@ -26,16 +28,26 @@ foreign import offline :: Effect GunDb
 
 -- gun.get(key)
 -- Where to read data from.
-class Getable a where
-  get :: a -> GunDb -> GunChainCtx
 
-instance getString :: Getable String where
-  get path db = _get [path] db
+class Getable a b where
+  doget :: a -> b -> GunChainCtx
 
-instance getStringArray:: Getable (Array String) where
-  get = _get
+instance getString :: Getable String GunDb where
+  doget path db = _get [path] db
+
+instance getStringArray:: Getable (Array String) GunDb where
+  doget = _get
+
+instance getString :: Getable String GunRoot where
+  doget path db = _getOnRoot [path] db
+
+instance getStringArray:: Getable (Array String) GunRoot where
+  doget = _getOnRoot
+
 
 foreign import _get :: Array String -> GunDb -> GunChainCtx
+
+foreign import _getOnRoot :: Array String -> GunRoot -> GunChainCtx
 
 
 -- gun.put(data, callback) 
