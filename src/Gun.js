@@ -57,11 +57,13 @@ exports._getOnUser = function (pathElements) {
   };
 };
 
-exports.map = function (ctx) {
-  return ctx.map();
+exports.map =  function (mapper) {
+  return function (ctx) {
+    return ctx.map(mapper);
+  };
 };
 
-exports.mapAndFilter = function (filter) {
+exports.filter = function (filter) {
   return function (ctx){
     return ctx.map(function(e){ return filter(e) ? e : undefined; });
   };
