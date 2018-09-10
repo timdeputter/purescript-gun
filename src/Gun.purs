@@ -75,6 +75,8 @@ foreign import map :: forall a b. (a -> b) -> GunChainCtx -> GunChainCtx
 
 foreign import filter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
 
+foreign import each ::GunChainCtx -> GunChainCtx
+
 -- gun.on(callback, option)
 -- Subscribe to updates and changes on a node or property in realtime.
 foreign import _on :: forall a b. GunChainCtx -> EffectFnAff { data :: a, key :: b }
