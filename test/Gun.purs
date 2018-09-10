@@ -43,7 +43,13 @@ main = run [consoleReporter] do
         _ <- liftEffect $ gundb # get "users" # set john
         _ <- liftEffect $ gundb # get "users" # set jim
         assertOn (gundb # get "users" # map # on) ["John", "jim"]
-
+        
+      it "allows registration and authentication of users" do
+        gundb <- liftEffect offline
+        _ <- liftEffect $ gundb # create "Jim" "secret"
+        ctx <- liftEffect $ gundb # auth "Jim" "secret"
+        _ <- liftEffect $ ctx # get "profile" # put {name: "Jim"}
+        assertGunResult (ctx # get "profile" # once) "Jim"
 
 assertOnce :: forall a b. Aff (Maybe {data :: {name :: String | a} | b}) -> Array String -> Aff Unit
 assertOnce aff names = aff >>= \res -> bound res names
