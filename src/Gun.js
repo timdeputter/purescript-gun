@@ -17,7 +17,7 @@ exports._on = function (ctx) {
     var canceled = false;
     ctx.on(function(data, key){
       if(!canceled) {
-        handler({data: data, key: key})();
+        onSuccess({data: data, key: key});
       }
     });
     return function (cancelError, cancelerError, cancelerSuccess) {
@@ -61,6 +61,10 @@ exports.map =  function (mapper) {
   return function (ctx) {
     return ctx.map(mapper);
   };
+};
+
+exports.each =  function (ctx) {
+  return ctx.map();
 };
 
 exports.filter = function (filter) {
