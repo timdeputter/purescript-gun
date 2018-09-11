@@ -12,7 +12,7 @@ $ bower install purescript-gun
 ```
 
 ## Getting started
-Use syncWithPeer or syncWithPeers to connect to gun database.
+Use `syncWithPeer` or `syncWithPeers` to connect to gun database.
 ```purescript
 do
   gundb -> liftEffect syncWithPeer "http://myserver.com/gun"
