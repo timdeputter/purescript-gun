@@ -1,4 +1,22 @@
-module Gun where
+-- | The `Gun` module provides a basic wrapper for gun.js database.
+-- | see https://gun.eco for details about the gun database.
+module Gun
+( GunDb
+, GunChainCtx
+, User
+, syncWithPeer
+, syncWithPeers
+, offline
+, class Getable
+, get
+, put
+, once
+, on
+, set
+, map
+, filter
+, each
+) where
 
 
 import Effect (Effect)
@@ -8,26 +26,31 @@ import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
 
 
+-- | Represents a reference to a gundb instance. 
 foreign import data GunDb :: Type
 
+-- | Basic datastructure to chain gun operations like 'put', 'set' or 'once'
 foreign import data GunChainCtx :: Type
 
+-- | An authenticated user for a gundb instance
 foreign import data User :: Type
 
 
---Gun(options)
--- Used to create a new gun database instance.
-
+-- | Creates a new gun database instance, and syncs the data with the given peer.
 foreign import syncWithPeer :: String -> Effect GunDb
 
+-- | Creates a new gun database instance, and syncs the data with the given peers.
 foreign import syncWithPeers :: Array String -> Effect GunDb
 
+-- | Creates a new local gun database instance, without syncing with any peers.
 foreign import offline :: Effect GunDb
 
 
--- gun.get(key)
--- Where to read data from.
-
+-- | A Typeclass which allows getting data from different sources.
+-- | 
+-- | The `get` function takes a path either as a String or as an Array of Strings
+-- | and returns a `GunChainCtx`.
+-- | `get` can be called on a `GunDb` instance or a `User`
 class Getable a b where
   get :: a -> b -> GunChainCtx
 
@@ -43,43 +66,47 @@ instance getStringFromUser :: Getable String User where
 instance getStringArrayFromUser :: Getable (Array String) User where
   get = _getOnUser
 
-
 foreign import _getOnGunDb :: Array String -> GunDb -> GunChainCtx
 
 foreign import _getOnUser :: Array String -> User -> GunChainCtx
 
 
--- gun.put(data, callback) 
--- Save data into gun, syncing it with your connected peers.
+-- | Save data into gun, syncing it with your connected peers.
 foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 
 
--- gun.once(callback, option)
--- Get the current data without subscribing to updates. Or undefined if it cannot be found.
-foreign import _once :: forall a b. GunChainCtx -> EffectFnAff (Maybe { data :: a, key :: b })
-
+-- | Get the current data without subscribing to updates. Or `Nothing` if it cannot be found.
 once :: forall a b. GunChainCtx -> Aff (Maybe { data :: a, key :: b })
 once = fromEffectFnAff <<< _once
 
-  
--- gun.set(data, callback)
--- Add a unique item to an unordered list.
+foreign import _once :: forall a b. GunChainCtx -> EffectFnAff (Maybe { data :: a, key :: b })
+
+
+-- | Add a unique item to an unordered list.
 foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
 
 
--- gun.map(callback)
--- Map iterates over each property and item on a node, passing it down the chain, 
--- behaving like a forEach on your data. It also subscribes to every item as well 
--- and listens for newly inserted items. 
+-- | Map iterates over each property and item on a node, passing it down the chain, 
+-- | transforming the data with the given function. It also subscribes to every item as well 
+-- | and listens for newly inserted items. 
 foreign import map :: forall a b. (a -> b) -> GunChainCtx -> GunChainCtx
 
+
+-- | Map iterates over each property and item on a node, passing it down the chain, 
+-- | filtering the data with the given function. It also subscribes to every item as well 
+-- | and listens for newly inserted items. 
 foreign import filter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
 
+
+-- | Map iterates over each property and item on a node, passing it down the chain.
+-- | It also subscribes to every item as well 
+-- | and listens for newly inserted items. 
 foreign import each ::GunChainCtx -> GunChainCtx
 
--- gun.on(callback, option)
--- Subscribe to updates and changes on a node or property in realtime.
-foreign import _on :: forall a b. GunChainCtx -> EffectFnAff { data :: a, key :: b }
 
+-- | Subscribe to updates and changes on a node or property in realtime.
 on :: forall a b. GunChainCtx -> Aff { data :: a, key :: b }
 on = fromEffectFnAff <<< _on
+
+foreign import _on :: forall a b. GunChainCtx -> EffectFnAff { data :: a, key :: b }
+

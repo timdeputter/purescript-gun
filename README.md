@@ -12,6 +12,28 @@ $ bower install purescript-gun
 ```
 
 ## Getting started
+Use syncWithPeer or syncWithPeers to connect to gun database.
+```purescript
+do
+  gundb -> liftEffect syncWithPeer "http://myserver.com/gun"
+  ...
+```
+
+After you've got a reference to a gundb instance, define a path with gun `get` and read data with `once`
+```purescript
+do
+  gundb -> liftEffect syncWithPeer "http://myserver.com/gun"
+  data -> gundb # get ["users", "friends"] # once
+  ...
+```
+
+Have a look at the test directory for more examples.
+
+
+
+## Documentation
+
+Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-gun).
 
 ## License
 
