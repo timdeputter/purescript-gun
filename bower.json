@@ -1,6 +1,10 @@
 {
   "name": "vagrant",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timdeputter/purescript-gun.git"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
