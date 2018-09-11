@@ -37,6 +37,4 @@ Module documentation is [published on Pursuit](http://pursuit.purescript.org/pac
 
 ## License
 
-"MIT"
-
 Check [LICENSE](LICENSE) file for more information.

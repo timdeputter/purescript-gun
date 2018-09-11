@@ -1,5 +1,6 @@
 {
   "name": "vagrant",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
