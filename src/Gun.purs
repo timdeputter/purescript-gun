@@ -26,7 +26,7 @@ import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
 
 
--- | Represents a reference to a gundb instance. 
+-- | Represents a reference to a gundb instance.
 foreign import data GunDb :: Type
 
 -- | Basic datastructure to chain gun operations like 'put', 'set' or 'once'
@@ -47,7 +47,7 @@ foreign import offline :: Effect GunDb
 
 
 -- | A Typeclass which allows getting data from different sources.
--- | 
+-- |
 -- | The `get` function takes a path either as a String or as an Array of Strings
 -- | and returns a `GunChainCtx`.
 -- | `get` can be called on a `GunDb` instance or a `User`
@@ -86,21 +86,21 @@ foreign import _once :: forall a b. GunChainCtx -> EffectFnAff (Maybe { data :: 
 foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
 
 
--- | Map iterates over each property and item on a node, passing it down the chain, 
--- | transforming the data with the given function. It also subscribes to every item as well 
--- | and listens for newly inserted items. 
+-- | Map iterates over each property and item on a node, passing it down the chain,
+-- | transforming the data with the given function. It also subscribes to every item as well
+-- | and listens for newly inserted items.
 foreign import map :: forall a b. (a -> b) -> GunChainCtx -> GunChainCtx
 
 
--- | Map iterates over each property and item on a node, passing it down the chain, 
--- | filtering the data with the given function. It also subscribes to every item as well 
--- | and listens for newly inserted items. 
+-- | Filter iterates over each property and item on a node, passing it down the chain,
+-- | filtering the data with the given function. It also subscribes to every item as well
+-- | and listens for newly inserted items.
 foreign import filter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
 
 
--- | Map iterates over each property and item on a node, passing it down the chain.
--- | It also subscribes to every item as well 
--- | and listens for newly inserted items. 
+-- | Each iterates over each property and item on a node, passing it down the chain.
+-- | It also subscribes to every item as well
+-- | and listens for newly inserted items.
 foreign import each ::GunChainCtx -> GunChainCtx
 
 
@@ -109,4 +109,3 @@ on :: forall a b. GunChainCtx -> Aff { data :: a, key :: b }
 on = fromEffectFnAff <<< _on
 
 foreign import _on :: forall a b. GunChainCtx -> EffectFnAff { data :: a, key :: b }
-
