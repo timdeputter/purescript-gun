@@ -76,7 +76,7 @@ foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 
 
 -- | Get the current data without subscribing to updates. Or `Nothing` if it cannot be found.
-once :: forall a b. GunChainCtx -> Aff (Maybe { data :: Foreign, key :: Foreign })
+once :: GunChainCtx -> Aff (Maybe { data :: Foreign, key :: Foreign })
 once = fromEffectFnAff <<< _once
 
 foreign import _once :: GunChainCtx -> EffectFnAff (Maybe { data :: Foreign, key :: Foreign })
