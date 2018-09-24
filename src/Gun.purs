@@ -24,7 +24,7 @@ import Effect.Aff (Aff)
 import Effect.Aff.Compat
 import Data.Maybe (Maybe)
 import Control.Semigroupoid ((<<<))
-
+import Foreign (Foreign)
 
 -- | Represents a reference to a gundb instance.
 foreign import data GunDb :: Type
@@ -76,10 +76,10 @@ foreign import put :: forall a. a -> GunChainCtx -> Effect GunChainCtx
 
 
 -- | Get the current data without subscribing to updates. Or `Nothing` if it cannot be found.
-once :: forall a b. GunChainCtx -> Aff (Maybe { data :: a, key :: b })
+once :: forall a b. GunChainCtx -> Aff (Maybe { data :: Foreign, key :: Foreign })
 once = fromEffectFnAff <<< _once
 
-foreign import _once :: forall a b. GunChainCtx -> EffectFnAff (Maybe { data :: a, key :: b })
+foreign import _once :: GunChainCtx -> EffectFnAff (Maybe { data :: Foreign, key :: Foreign })
 
 
 -- | Add a unique item to an unordered list.
@@ -89,13 +89,13 @@ foreign import set :: GunChainCtx -> GunChainCtx -> Effect GunChainCtx
 -- | Map iterates over each property and item on a node, passing it down the chain,
 -- | transforming the data with the given function. It also subscribes to every item as well
 -- | and listens for newly inserted items.
-foreign import map :: forall a b. (a -> b) -> GunChainCtx -> GunChainCtx
+foreign import map :: (Foreign -> Foreign) -> GunChainCtx -> GunChainCtx
 
 
 -- | Filter iterates over each property and item on a node, passing it down the chain,
 -- | filtering the data with the given function. It also subscribes to every item as well
 -- | and listens for newly inserted items.
-foreign import filter :: forall a. (a -> Boolean) -> GunChainCtx -> GunChainCtx
+foreign import filter :: (Foreign -> Boolean) -> GunChainCtx -> GunChainCtx
 
 
 -- | Each iterates over each property and item on a node, passing it down the chain.
@@ -105,7 +105,7 @@ foreign import each ::GunChainCtx -> GunChainCtx
 
 
 -- | Subscribe to updates and changes on a node or property in realtime.
-on :: forall a b. GunChainCtx -> Aff { data :: a, key :: b }
+on :: GunChainCtx -> Aff { data :: Foreign, key :: Foreign }
 on = fromEffectFnAff <<< _on
 
-foreign import _on :: forall a b. GunChainCtx -> EffectFnAff { data :: a, key :: b }
+foreign import _on ::  GunChainCtx -> EffectFnAff { data :: Foreign, key :: Foreign }
