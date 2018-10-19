@@ -90,23 +90,25 @@ exports.set = function (ref) {
 };
 
 
-exports._load = function (ctx) { 
-  return function (onError, onSuccess) { 
-    var canceled = false;
-    ctx.load(function(data){
-      if(!canceled) {
-        if(data === undefined){
-          onSuccess(Maybe.Nothing.value0);
-        } else{
-          onSuccess(Maybe.Just.create(data));
+exports._load = function (waittime){
+  return function (ctx) { 
+    return function (onError, onSuccess) { 
+      var canceled = false;
+      ctx.load(function(data){
+        if(!canceled) {
+          if(data === undefined){
+            onSuccess(Maybe.Nothing.value0);
+          } else{
+            onSuccess(Maybe.Just.create(data));
+          }
         }
-      }
-    }, {wait: 0});
-    return function (cancelError, cancelerError, cancelerSuccess) {
-      canceled = true;
-      cancelerSuccess();
+      }, {wait: waittime});
+      return function (cancelError, cancelerError, cancelerSuccess) {
+        canceled = true;
+        cancelerSuccess();
+      };
     };
-  };
+  }
 };
 
 
