@@ -83,10 +83,10 @@ foreign import _once :: GunChainCtx -> EffectFnAff (Maybe { data :: Foreign, key
 
 
 -- | Loads a complete graph at once
-load :: GunChainCtx -> Aff (Maybe { data :: Foreign })
+load :: Int -> GunChainCtx -> Aff (Maybe { data :: Foreign })
 load = fromEffectFnAff <<< _load
 
-foreign import _load :: GunChainCtx -> EffectFnAff (Maybe { data :: Foreign, key :: Foreign })
+foreign import _load :: Int -> GunChainCtx -> EffectFnAff (Maybe { data :: Foreign, key :: Foreign })
 
 
 -- | Add a unique item to an unordered list.
