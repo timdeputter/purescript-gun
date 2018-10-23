@@ -84,7 +84,7 @@ foreign import _once :: GunChainCtx -> EffectFnAff (Maybe { data :: Foreign, key
 
 -- | Loads a complete graph at once
 load :: Int -> GunChainCtx -> Aff (Maybe Foreign)
-load = fromEffectFnAff <<< _load
+load waittime ctx = fromEffectFnAff (_load waittime ctx)
 
 foreign import _load :: Int -> GunChainCtx -> EffectFnAff (Maybe Foreign)
 
